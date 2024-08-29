@@ -31,7 +31,7 @@
         if (authToken) {
             // If the user is logged in, show Home, Create Blog, and Logout
             navLinks.innerHTML = `
-                <a href="all-blogs.html">Home</a>
+                <a href="index.html">Home</a>
                 <a href="my-blogs.html" class="btn">My Blogs</a>
                 <a href="create-blog.html" class="btn">Create New Blog</a>
                 <a href="#" id="logoutBtn" class="btn">Logout</a>
@@ -39,7 +39,7 @@
         } else {
             // If the user is not logged in, show Home, Register, Login, and Create Blog
             navLinks.innerHTML = `
-                <a href="all-blogs.html">Home</a>
+                <a href="index.html">Home</a>
                 <a href="registration.html">Register</a>
                 <a href="login.html">Login</a>
                 <a href="#" id="createBlogBtn" class="btn">Create New Blog</a>
@@ -69,7 +69,7 @@
                 localStorage.removeItem('jwt');
 
                 // Redirect to the home page after logout
-                window.location.href = 'all-blogs.html';
+                window.location.href = 'index.html';
             });
         }
 
