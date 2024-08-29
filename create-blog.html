@@ -13,9 +13,9 @@
     <div class="navbar">
         <div class="navbar-title">Personal Pursuits</div>
         <div class="nav-links">
-            <a href="all-blogs.html">Home</a>
+            <a href="index.html">Home</a>
             <a href="my-blogs.html">My Blogs</a>
-            <a href="all-blogs.html" id="logoutBtn" class="btn">Logout</a>
+            <a href="index.html" id="logoutBtn" class="btn">Logout</a>
         </div>
     </div>
     <form id="createBlogForm" enctype="multipart/form-data">
@@ -55,7 +55,7 @@
             localStorage.removeItem('jwt');
 
             // Optionally, you can redirect the user to the login page or home page
-            window.location.href = 'all-blogs.html';
+            window.location.href = 'index.html';
         });
 
         document.addEventListener('DOMContentLoaded', function () {

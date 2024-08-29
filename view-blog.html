@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Blog</title>
-    
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <link rel="stylesheet" href="./CSS/view-blog.css">
@@ -15,9 +15,9 @@
     <div class="navbar">
         <div class="navbar-title">Personal Pursuits</div>
         <div class="nav-links">
-          <a href="all-blogs.html">Home</a>
-          <a href="my-blogs.html">My Blogs</a>
-          <a href="all-blogs.html" id="logoutBtn" class="btn">Logout</a>
+            <a href="index.html">Home</a>
+            <a href="my-blogs.html">My Blogs</a>
+            <a href="index.html" id="logoutBtn" class="btn">Logout</a>
         </div>
     </div>
     <div class="card">
@@ -29,7 +29,7 @@
     </div>
 
     <script>
-       const logoutBtn = document.getElementById('logoutBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
         logoutBtn.addEventListener('click', function (e) {
             e.preventDefault(); // Prevent the default link behavior
 
@@ -37,7 +37,7 @@
             localStorage.removeItem('jwt');
 
             // Optionally, you can redirect the user to the login page or home page
-            window.location.href = 'all-blogs.html';
+            window.location.href = 'index.html';
         });
 
 
@@ -103,7 +103,7 @@
                             document.body.innerHTML = '<h1>Blog deleted successfully!</h1>';
                             // Optionally, redirect to another page
                             setTimeout(() => {
-                                window.location.href = 'all-blogs.html';
+                                window.location.href = 'index.html';
                             }, 1000);
                         })
                         .catch(error => {
@@ -248,7 +248,7 @@
                             document.body.innerHTML = '<h1>Blog deleted successfully!</h1>';
                             // Optionally, redirect to another page
                             setTimeout(() => {
-                                window.location.href = 'all-blogs.html'; // Change this to the desired page
+                                window.location.href = 'index.html'; // Change this to the desired page
                             }, 1000); // Optional delay to show the success message
                         })
                         .catch(error => {

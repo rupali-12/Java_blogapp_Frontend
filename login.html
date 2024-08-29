@@ -28,7 +28,7 @@
                 if (response.ok) {
                     const jwt = await response.text();
                     localStorage.setItem('jwt', jwt);
-                    window.location.href = 'all-blogs.html'; // Redirect to the "View All Blogs" page
+                    window.location.href = 'index.html'; // Redirect to the "View All Blogs" page
                 } else {
                     const error = await response.text();
                     alert(`Error: ${error}`);
