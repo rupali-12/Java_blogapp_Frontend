@@ -59,7 +59,8 @@
 
         // Fetch and populate the blog data in the form
         if (blogId) {
-            fetch(`http://localhost:8080/post/id/${blogId}`, {
+            // fetch(`http://localhost:8080/post/id/${blogId}`, {
+            fetch(`https://javablogappbackend-production.up.railway.app/post/id/${blogId}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + jwtToken
@@ -107,7 +108,8 @@
         document.getElementById('editBlogForm').addEventListener('submit', function (event) {
             event.preventDefault();
             const formData = new FormData(this);
-            fetch(`http://localhost:8080/post/id/${blogId}`, {
+            // fetch(`http://localhost:8080/post/id/${blogId}`, {
+            fetch(`https://javablogappbackend-production.up.railway.app/post/id/${blogId}`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': 'Bearer ' + jwtToken
@@ -135,7 +137,8 @@
         });
 
         function deleteImage(imageUrl, imageContainer) {
-            fetch('http://localhost:8080/post/delete-image', {
+            // fetch('http://localhost:8080/post/delete-image', {
+            fetch('https://javablogappbackend-production.up.railway.app/post/delete-image', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -156,106 +159,6 @@
         }
     </script>
 
-    <!-- <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const blogId = urlParams.get('id');
-    const jwtToken = localStorage.getItem('jwt');
-
-    // Fetch and populate the blog data in the form
-    if (blogId) {
-        fetch(`http://localhost:8080/post/id/${blogId}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': 'Bearer ' + jwtToken
-            }
-        })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('title').value = data.title;
-                document.getElementById('content').value = data.content;
-                const imagePreviewContainer = document.getElementById('imagePreviewContainer');
-                imagePreviewContainer.innerHTML = '';
-                if (data.imageUrls) {
-                    data.imageUrls.forEach(url => {
-                        const img = document.createElement('img');
-                        img.src = url;
-                        imagePreviewContainer.appendChild(img);
-                        const deleteButton = document.createElement('button');
-                        deleteButton.textContent = 'Delete Image';
-                        deleteButton.className = 'btn btn-danger btn-sm';
-                        deleteButton.onclick = (event) => {
-                            event.preventDefault(); // Prevent any default action
-                            deleteImage(url);
-                        };
-                        imagePreviewContainer.appendChild(deleteButton);
-                    });
-                }
-            })
-            .catch(error => {
-                document.getElementById('message').innerText = 'Error fetching blog: ' + error.message;
-                document.getElementById('message').className = 'alert alert-danger';
-            });
-    } else {
-        document.getElementById('message').innerText = 'Invalid blog ID.';
-        document.getElementById('message').className = 'alert alert-danger';
-    }
-
-    // Handle form submission
-    document.getElementById('editBlogForm').addEventListener('submit', function (event) {
-        event.preventDefault();
-        const formData = new FormData(this);
-        fetch(`http://localhost:8080/post/id/${blogId}`, {
-            method: 'PUT',
-            headers: {
-                'Authorization': 'Bearer ' + jwtToken
-            },
-            body: formData
-        })
-            .then(response => {
-                if (!response.ok) {
-                    return response.text().then(text => { throw new Error(text); });
-                }
-                return response.json();
-            })
-            .then(data => {
-                document.getElementById('message').innerText = 'Blog updated successfully!';
-                document.getElementById('message').className = 'alert alert-success';
-                // Redirect to the view blog page only after successful update
-                setTimeout(() => {
-                    window.location.href = `view-blog.html?id=${encodeURIComponent(blogId)}`;
-                }, 1000); // Optional delay to show the success message
-            })
-            .catch(error => {
-                document.getElementById('message').innerText = 'Error: ' + error.message;
-                document.getElementById('message').className = 'alert alert-danger';
-            });
-    });
-
-    function deleteImage(imageUrl) {
-        fetch('http://localhost:8080/post/delete-image', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + jwtToken
-            },
-            body: JSON.stringify({ imageUrl })
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to delete image');
-                }
-                // Remove the image preview from the frontend
-                const img = document.querySelector(`img[src='${imageUrl}']`);
-                img.parentNode.removeChild(img);
-                const button = img.nextSibling;
-                button.parentNode.removeChild(button);
-            })
-            .catch(error => {
-                console.error('Error deleting image:', error);
-            });
-    }
-</script> -->
-
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
@@ -263,103 +166,3 @@
 </body>
 
 </html>
-<!-- 
-
-    <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const blogId = urlParams.get('id');
-        const jwtToken = localStorage.getItem('jwt');
-
-        // Fetch and populate the blog data in the form
-        if (blogId) {
-            fetch(`http://localhost:8080/post/id/${blogId}`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': 'Bearer ' + jwtToken
-                }
-            })
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('title').value = data.title;
-                    document.getElementById('content').value = data.content;
-                    const imagePreviewContainer = document.getElementById('imagePreviewContainer');
-                    imagePreviewContainer.innerHTML = '';
-                    if (data.imageUrls) {
-                        data.imageUrls.forEach(url => {
-                            const img = document.createElement('img');
-                            img.src = url;
-                            imagePreviewContainer.appendChild(img);
-                            const deleteButton = document.createElement('button');
-                            deleteButton.textContent = 'Delete Image';
-                            deleteButton.className = 'btn btn-danger btn-sm';
-                            deleteButton.onclick = () => deleteImage(url);
-                            imagePreviewContainer.appendChild(deleteButton);
-                        });
-                    }
-                })
-                .catch(error => {
-                    document.getElementById('message').innerText = 'Error fetching blog: ' + error.message;
-                    document.getElementById('message').className = 'alert alert-danger';
-                });
-        } else {
-            document.getElementById('message').innerText = 'Invalid blog ID.';
-            document.getElementById('message').className = 'alert alert-danger';
-        }
-
-        // Handle form submission
-        document.getElementById('editBlogForm').addEventListener('submit', function (event) {
-            event.preventDefault();
-            const formData = new FormData(this);
-            fetch(`http://localhost:8080/bloggiator/id/${blogId}`, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': 'Bearer ' + jwtToken
-                },
-                body: formData
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        return response.text().then(text => { throw new Error(text); });
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    document.getElementById('message').innerText = 'Blog updated successfully!';
-                    document.getElementById('message').className = 'alert alert-success';
-                    // Redirect to the view blog page only after successful update
-                    setTimeout(() => {
-                        window.location.href = `view-blog.html?id=${encodeURIComponent(blogId)}`;
-                    }, 1000); // Optional delay to show the success message
-                })
-                .catch(error => {
-                    document.getElementById('message').innerText = 'Error: ' + error.message;
-                    document.getElementById('message').className = 'alert alert-danger';
-                });
-        });
-
-        function deleteImage(imageUrl) {
-            fetch('http://localhost:8080/bloggiator/delete-image', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + jwtToken
-                },
-                body: JSON.stringify({ imageUrl })
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to delete image');
-                    }
-                    // Remove the image preview from the frontend
-                    const img = document.querySelector(`img[src='${imageUrl}']`);
-                    img.parentNode.removeChild(img);
-                    const button = img.nextSibling;
-                    button.parentNode.removeChild(button);
-                })
-                .catch(error => {
-                    console.error('Error deleting image:', error);
-                });
-        }
-    </script>
-
--->

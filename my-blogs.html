@@ -40,7 +40,8 @@
             const jwtToken = localStorage.getItem('jwt');
 
             // Fetch blogs created by the logged-in user
-            fetch('http://localhost:8080/post/myblogs', {
+            // fetch('http://localhost:8080/post/myblogs', {
+            fetch('https://javablogappbackend-production.up.railway.app/post/myblogs', {
                 headers: {
                     'Authorization': 'Bearer ' + jwtToken
                 }
@@ -78,7 +79,8 @@
                             deleteButton.textContent = 'Delete Blog';
                             deleteButton.onclick = function () {
                                 if (confirm('Are you sure you want to delete this blog?')) {
-                                    fetch(`http://localhost:8080/post/id/${blog.id}`, {
+                                    // fetch(`http://localhost:8080/post/id/${blog.id}`, {
+                                    fetch(`https://javablogappbackend-production.up.railway.app/post/id/${blog.id}`, {
                                         method: 'DELETE',
                                         headers: {
                                             'Authorization': 'Bearer ' + jwtToken

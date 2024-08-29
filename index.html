@@ -74,7 +74,8 @@
         }
 
         // Fetch all blogs and display them
-        fetch('http://localhost:8080/post/allblog')
+        // fetch('http://localhost:8080/post/allblog')
+        fetch('https://javablogappbackend-production.up.railway.app/post/allblog')
             .then(response => {
                 if (response.ok) {
                     return response.json();
