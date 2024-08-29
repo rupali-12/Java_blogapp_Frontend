@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Blog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="./CSS/create-blog.css">
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="navbar-title">Personal Pursuits</div>
+        <div class="nav-links">
+            <a href="all-blogs.html">Home</a>
+            <a href="my-blogs.html">My Blogs</a>
+            <a href="all-blogs.html" id="logoutBtn" class="btn">Logout</a>
+        </div>
+    </div>
+    <form id="createBlogForm" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="title" class="label">Blog Title</label>
+            <div class="input-group">
+                <i class="fas fa-heading"></i>
+                <input type="text" id="title" name="title" class="form-control" placeholder="Enter blog title"
+                    required />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="title" class="label">Blog Content</label>
+            <div class="input-group">
+                <i class="fas fa-pencil-alt"></i>
+                <textarea id="content" name="content" class="form-control" placeholder="Enter blog content"
+                    required></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="files" class="label">Upload Images</label>
+            <div class="input-group">
+                <i class="fas fa-file-image"></i>
+                <input type="file" id="files" name="files" class="form-control" multiple />
+            </div>
+        </div>
+        <button type="submit" class="btn">Create Blog</button>
+    </form>
+
+    <script>
+
+        const logoutBtn = document.getElementById('logoutBtn');
+        logoutBtn.addEventListener('click', function (e) {
+            e.preventDefault(); // Prevent the default link behavior
+
+            // Remove the authentication token from localStorage
+            localStorage.removeItem('jwt');
+
+            // Optionally, you can redirect the user to the login page or home page
+            window.location.href = 'all-blogs.html';
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var form = document.getElementById('createBlogForm');
+            if (form) {
+                form.addEventListener('submit', function (event) {
+                    event.preventDefault();
+
+                    var formData = new FormData(form);
+
+                    fetch('http://localhost:8080/post/create', {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('jwt') // Adjust as necessary
+                        }
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                return response.json();
+                            } else {
+                                return response.text().then(text => { throw new Error(text); });
+                            }
+                        })
+                        .then(data => {
+                            console.log('Blog created:', data);
+                            // Redirect to the view blog page using the blog ID
+                            window.location.href = `view-blog.html?id=${encodeURIComponent(data.id)}`;
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                });
+            } else {
+                console.error('Form with ID createBlogForm not found.');
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Blogs</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="./CSS/all-blogs.css">
+    <!-- <link rel="stylesheet" href="./CSS/navbar.css">  -->
+
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="navbar-title">Personal Pursuits</div>
+        <div class="nav-links" id="navLinks">
+            <!-- Links will be dynamically added here -->
+        </div>
+    </div>
+
+    <h1>All Blogs</h1>
+    <div id="blogsContainer"></div>
+
+    <script>
+        // Check if the user is logged in by verifying the presence of the auth token in localStorage
+        const authToken = localStorage.getItem('jwt');
+        const navLinks = document.getElementById('navLinks');
+
+        if (authToken) {
+            // If the user is logged in, show Home, Create Blog, and Logout
+            navLinks.innerHTML = `
+                <a href="all-blogs.html">Home</a>
+                <a href="my-blogs.html" class="btn">My Blogs</a>
+                <a href="create-blog.html" class="btn">Create New Blog</a>
+                <a href="#" id="logoutBtn" class="btn">Logout</a>
+            `;
+        } else {
+            // If the user is not logged in, show Home, Register, Login, and Create Blog
+            navLinks.innerHTML = `
+                <a href="all-blogs.html">Home</a>
+                <a href="registration.html">Register</a>
+                <a href="login.html">Login</a>
+                <a href="#" id="createBlogBtn" class="btn">Create New Blog</a>
+            `;
+        }
+
+        // Add event listener for Create Blog button (when user is not logged in)
+        const createBlogBtn = document.getElementById('createBlogBtn');
+        if (createBlogBtn) {
+            createBlogBtn.addEventListener('click', function (e) {
+                e.preventDefault(); // Prevent the default link behavior
+
+                if (!authToken) {
+                    // Redirect to the Login page if not logged in
+                    window.location.href = 'login.html';
+                }
+            });
+        }
+
+        // Add event listener for Logout button (if it exists)
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', function (e) {
+                e.preventDefault(); // Prevent the default link behavior
+
+                // Remove the authentication token from localStorage
+                localStorage.removeItem('jwt');
+
+                // Redirect to the home page after logout
+                window.location.href = 'all-blogs.html';
+            });
+        }
+
+        // Fetch all blogs and display them
+        fetch('http://localhost:8080/post/allblog')
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    return response.text().then(text => { throw new Error(text); });
+                }
+            })
+            .then(data => {
+                const blogsContainer = document.getElementById('blogsContainer');
+                blogsContainer.innerHTML = '';
+                data.forEach(blog => {
+                    const blogCard = document.createElement('div');
+                    blogCard.className = 'card';
+                    blogCard.innerHTML = `
+                    ${blog.imageUrls && blog.imageUrls.length > 0 ?
+                            `<img src="${blog.imageUrls[0]}" alt="${blog.title}">` : ''}
+                    <h2>${blog.title}</h2>
+                    
+                    <a href="view-blog.html?id=${blog.id}" class="btn">View Blog</a>
+                `;
+                    blogsContainer.appendChild(blogCard);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching blogs:', error);
+            });
+    </script>
+</body>
+
+</html>

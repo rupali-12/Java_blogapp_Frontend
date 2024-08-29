@@ -1,0 +1,186 @@
+/* Reset some basic styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+.navbar {
+    width: 100%;
+    background-color: rgba(13, 175, 175, 0.9);
+    padding: 15px 30px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box; /* Ensure padding is included in width */
+    margin: 0; /* Remove any default margin */
+}
+
+.navbar-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #044a42;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+}
+
+.nav-links a {
+    color: #044a42;
+    text-decoration: none;
+    font-size: 18px;
+    margin: 0 15px;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: #005f56;
+}
+
+.nav-links .btn {
+    background-color: #1a6f67;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-left: 15px;
+    text-decoration: none;
+    color: white;
+    transition: background-color 0.3s;
+}
+
+.nav-links .btn:hover {
+    background-color: #00796b;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 15px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 600px;
+    margin: 40px auto;
+    text-align: left;
+    box-sizing: border-box;
+}
+
+.card-title {
+    text-align: center;
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-size: 16px;
+    color: #555;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    outline: none;
+}
+
+.form-control-file {
+    display: block;
+    margin-top: 10px;
+}
+
+.image-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.image-container {
+    position: relative;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.image-container img {
+    max-width: 100px;
+    max-height: 100px;
+    border-radius: 5px;
+    object-fit: cover;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.image-container button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 2px 5px;
+    font-size: 12px;
+}
+
+.btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #00796b;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #005f56;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    margin-left: 10px;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+
+.alert {
+    display: none;
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+}
