@@ -13,6 +13,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    position: relative;
 }
 
 .card {
@@ -23,6 +24,7 @@ body {
     padding: 30px;
     width: 90%;
     max-width: 400px;
+    z-index: 1; /* Ensure card is above overlay */
 }
 
 h1 {
@@ -99,11 +101,63 @@ h1 {
     /* Slight lift effect */
 }
 
-.mt-3 {
-    margin-top: 1rem;
-    color: #d9534f;
-    /* Bootstrap danger color */
+/* Dialog Box Styles */
+.dialog-box {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    z-index: 1000;
     text-align: center;
+    min-width: 300px;
+}
+
+.dialog-box p {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dialog-box .checkmark {
+    font-size: 36px;
+    color: #28a745;
+    margin-right: 10px;
+}
+
+.dialog-box button {
+    padding: 10px 20px;
+    background-color: #00796b;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.dialog-box button:hover {
+    background-color: #005f56;
+}
+
+/* Overlay for Dialog Box */
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Responsive Styles */

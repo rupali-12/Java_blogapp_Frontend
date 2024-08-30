@@ -5,11 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-    <link rel="stylesheet" href="./css/register.css">
-
+    <link rel="stylesheet" href="./CSS/register.css">
 </head>
 
 <body>
@@ -34,16 +31,14 @@
                 <label for="password">Password</label>
                 <div class="input-group">
                     <i class="fas fa-lock"></i>
-                    <input type="password" class="form-control" id="password" placeholder="Enter your password"
-                        required>
+                    <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
                 </div>
             </div>
             <div class="form-group">
                 <label for="confirmPassword">Confirm Password</label>
                 <div class="input-group">
                     <i class="fas fa-lock"></i>
-                    <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password"
-                        required>
+                    <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password" required>
                 </div>
             </div>
             <button type="submit" id="submit" class="btn btn-primary">Sign Up</button>
@@ -51,31 +46,35 @@
         <div id="message" class="mt-3"></div>
     </div>
 
+    <!-- Dialog Box -->
+    <div class="overlay"></div>
+    <div class="dialog-box">
+        <p><span class="checkmark">&#10003;</span> Registration Successful!</p>
+        <button onclick="redirectToLogin()">OK</button>
+    </div>
+
     <script>
         document.getElementById('signupForm').addEventListener('submit', function (event) {
             event.preventDefault();
 
-            // Retrieve the values from the input fields
             var username = document.getElementById('username').value;
             var email = document.getElementById('email').value;
             var password = document.getElementById('password').value;
             var confirmPassword = document.getElementById('confirmPassword').value;
 
-            // Check if passwords match
             if (password !== confirmPassword) {
                 document.getElementById('message').innerText = 'Passwords do not match.';
-                return; // Exit the function if passwords don't match
+                return;
             }
 
-            // Create the request payload
             var payload = {
                 userName: username,
                 email: email,
                 password: password,
-                roles: ["USER"] // Default role or any roles you want to assign
+                roles: ["USER"]
             };
 
-            // Make the POST request to the backend
+                // Make the POST request to the backend
             // fetch('http://localhost:8080/public/signup', {
             fetch('https://javablogappbackend-production.up.railway.app/public/signup', {
                 method: 'POST',
@@ -86,8 +85,7 @@
             })
                 .then(response => {
                     if (response.ok) {
-                        // Redirect to the login page with a success message
-                        window.location.href = 'login.html?message=Registered successfully';
+                        showSuccessDialog(); // Show the dialog box on success
                     } else {
                         response.text().then(text => {
                             document.getElementById('message').innerText = `Sign-up failed: ${text}`;
@@ -99,6 +97,15 @@
                     console.error('Error:', error);
                 });
         });
+
+        function showSuccessDialog() {
+            document.querySelector('.overlay').style.display = 'flex';
+            document.querySelector('.dialog-box').style.display = 'block';
+        }
+
+        function redirectToLogin() {
+            window.location.href = 'login.html';
+        }
     </script>
 </body>
 

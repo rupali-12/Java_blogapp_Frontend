@@ -7,14 +7,14 @@
     <title>All Blogs</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="./css/all-blogs.css">
+    <link rel="stylesheet" href="./CSS/index.css">
     <!-- <link rel="stylesheet" href="./CSS/navbar.css">  -->
 
 </head>
 
 <body>
     <div class="navbar">
-        <div class="navbar-title">Personal Pursuits</div>
+        <div class="navbar-title"><span id="logospan">Personal</span> Pursuits</div>
         <div class="nav-links" id="navLinks">
             <!-- Links will be dynamically added here -->
         </div>
@@ -32,9 +32,9 @@
             // If the user is logged in, show Home, Create Blog, and Logout
             navLinks.innerHTML = `
                 <a href="index.html">Home</a>
-                <a href="my-blogs.html" class="btn">My Blogs</a>
-                <a href="create-blog.html" class="btn">Create New Blog</a>
-                <a href="#" id="logoutBtn" class="btn">Logout</a>
+                <a href="my-blogs.html">My Blogs</a>
+                <a href="create-blog.html">Create New Blog</a>
+                <a href="#" id="logoutBtn">Logout</a>
             `;
         } else {
             // If the user is not logged in, show Home, Register, Login, and Create Blog
@@ -42,7 +42,7 @@
                 <a href="index.html">Home</a>
                 <a href="registration.html">Register</a>
                 <a href="login.html">Login</a>
-                <a href="#" id="createBlogBtn" class="btn">Create New Blog</a>
+                <a href="#" id="createBlogBtn">Create New Blog</a>
             `;
         }
 
@@ -73,16 +73,16 @@
             });
         }
 
-        // Fetch all blogs and display them
-        // fetch('http://localhost:8080/post/allblog')
-        fetch('https://javablogappbackend-production.up.railway.app/post/allblog')
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    return response.text().then(text => { throw new Error(text); });
-                }
-            })
+         // Fetch all blogs and display them
+            // fetch('http://localhost:8080/post/allblog')
+            fetch('https://javablogappbackend-production.up.railway.app/post/allblog')
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        return response.text().then(text => { throw new Error(text); });
+                    }
+                })
             .then(data => {
                 const blogsContainer = document.getElementById('blogsContainer');
                 blogsContainer.innerHTML = '';

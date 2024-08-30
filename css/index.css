@@ -1,0 +1,164 @@
+/* Reset some default styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-image: url("../images/image7.avif");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow-x: hidden; /* Prevent horizontal overflow */
+}
+
+#logospan{
+  color:#d2f7f2;
+   font-size: 30px;
+   font-style: italic;
+}
+
+/* Navbar Styles */
+.navbar {
+  position: fixed; /* Fix the navbar at the top */
+  top: 0; /* Align it to the top */
+  left: 0; /* Align it to the left */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(13, 175, 175, 0.9);
+  padding: 20px 40px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  width: 100%; /* Ensure it takes up the full width */
+  z-index: 1000; /* Ensure it stays above other elements */
+}
+
+.navbar-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: #044a42;
+  text-shadow: #044a42;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+}
+
+.nav-links a {
+  color: #044a42;
+  text-decoration: none;
+  font-size: 18px;
+  margin: 0 15px;
+  transition: color 0.3s;
+  font-weight: bold;
+}
+
+.nav-links a:hover {
+  color: #005f56;
+}
+
+.nav-links .btn {
+  background-color: #1a6f67;
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin-left: 15px;
+  text-decoration: none;
+  color: white;
+  transition: background-color 0.3s;
+}
+
+.nav-links .btn:hover {
+  background-color: #00796b;
+}
+
+/* Header Styles */
+h1 {
+  text-align: center;
+  margin-top: 80px; /* Adjust margin to account for the fixed navbar */
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Blog Container Styles */
+#blogsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 30px auto; /* Center the container */
+  width: 100%; /* Ensure container does not exceed the viewport width */
+  max-width: 1200px; /* Set a max-width for better readability on large screens */
+  padding: 0 15px; /* Add padding to ensure content is not too close to the edges */
+}
+
+.card {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  transition: transform 0.3s;
+  width: 100%;
+  max-width: 500px;
+  margin: 10px 0;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.card h2 {
+  margin-bottom: 10px;
+  color: #333;
+  text-align: center;
+  font-size: 24px;
+}
+
+.card p {
+  margin-bottom: 15px;
+  font-size: 16px;
+  color: #666;
+}
+
+.btn {
+  display: inline-block;
+  background-color: #00796b;
+  color: white;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin: 15px 0;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn:hover {
+  background-color: #005f56;
+  transform: translateY(-2px);
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+  #blogsContainer {
+      margin: 15px;
+  }
+
+  .card {
+      padding: 15px;
+      max-width: 100%;
+  }
+
+  h1 {
+      font-size: 24px;
+  }
+
+  .btn {
+      font-size: 14px;
+  }
+}

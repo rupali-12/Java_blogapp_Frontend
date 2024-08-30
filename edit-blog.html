@@ -7,16 +7,16 @@
     <title>Edit Blog</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="./css/edit-blog.css">
+    <link rel="stylesheet" href="./CSS/edit-blog.css">
 </head>
 
 <body>
     <div class="navbar">
-        <div class="navbar-title">Personal Pursuits</div>
+        <div class="navbar-title"><span id="logospan">Personal</span> Pursuits</div>
         <div class="nav-links">
             <a href="index.html">Home</a>
-            <a href="dashboard.html">Dashboard</a>
-            <a href="index.html" id="logoutBtn" class="btn">Logout</a>
+            <a href="my-blogs.html">My Blog</a>
+            <a href="#" id="logoutBtn">Logout</a>
         </div>
     </div>
     <div class="card">
@@ -40,32 +40,27 @@
         <div id="message" class="alert"></div>
     </div>
 
+    <!-- Dialog Box -->
+    <div class="overlay"></div>
+    <div class="dialog-box">
+        <p><span class="checkmark">&#10003;</span> Edited Successfully!</p>
+        <button onclick="redirectToViewBlog()">OK</button>
+    </div>
+
     <script>
-
-        const logoutBtn = document.getElementById('logoutBtn');
-        logoutBtn.addEventListener('click', function (e) {
-            e.preventDefault(); // Prevent the default link behavior
-
-            // Remove the authentication token from localStorage
-            localStorage.removeItem('jwt');
-
-            // Optionally, you can redirect the user to the login page or home page
-            window.location.href = 'index.html';
-        });
-
         const urlParams = new URLSearchParams(window.location.search);
         const blogId = urlParams.get('id');
         const jwtToken = localStorage.getItem('jwt');
 
         // Fetch and populate the blog data in the form
-        if (blogId) {
-            // fetch(`http://localhost:8080/post/id/${blogId}`, {
-            fetch(`https://javablogappbackend-production.up.railway.app/post/id/${blogId}`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': 'Bearer ' + jwtToken
-                }
-            })
+            if (blogId) {
+                // fetch(`http://localhost:8080/post/id/${blogId}`, {
+                fetch(`https://javablogappbackend-production.up.railway.app/post/id/${blogId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + jwtToken
+                    }
+                })
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('title').value = data.title;
@@ -74,7 +69,6 @@
                     imagePreviewContainer.innerHTML = '';
                     if (data.imageUrls) {
                         data.imageUrls.forEach(url => {
-                            // Create a container for the image and delete button
                             const imageContainer = document.createElement('div');
                             imageContainer.className = 'image-container';
 
@@ -86,7 +80,7 @@
                             deleteButton.textContent = 'Delete Image';
                             deleteButton.className = 'btn btn-danger btn-sm';
                             deleteButton.onclick = (event) => {
-                                event.preventDefault(); // Prevent any default action
+                                event.preventDefault();
                                 deleteImage(url, imageContainer);
                             };
                             imageContainer.appendChild(deleteButton);
@@ -108,7 +102,7 @@
         document.getElementById('editBlogForm').addEventListener('submit', function (event) {
             event.preventDefault();
             const formData = new FormData(this);
-            // fetch(`http://localhost:8080/post/id/${blogId}`, {
+             // fetch(`http://localhost:8080/post/id/${blogId}`, {
             fetch(`https://javablogappbackend-production.up.railway.app/post/id/${blogId}`, {
                 method: 'PUT',
                 headers: {
@@ -123,12 +117,7 @@
                     return response.json();
                 })
                 .then(data => {
-                    document.getElementById('message').innerText = 'Blog updated successfully!';
-                    document.getElementById('message').className = 'alert alert-success';
-                    // Redirect to the view blog page only after successful update
-                    setTimeout(() => {
-                        window.location.href = `view-blog.html?id=${encodeURIComponent(blogId)}`;
-                    }, 1000); // Optional delay to show the success message
+                    showSuccessDialog(); // Show the dialog box on success
                 })
                 .catch(error => {
                     document.getElementById('message').innerText = 'Error: ' + error.message;
@@ -137,7 +126,7 @@
         });
 
         function deleteImage(imageUrl, imageContainer) {
-            // fetch('http://localhost:8080/post/delete-image', {
+              // fetch('http://localhost:8080/post/delete-image', {
             fetch('https://javablogappbackend-production.up.railway.app/post/delete-image', {
                 method: 'POST',
                 headers: {
@@ -150,15 +139,24 @@
                     if (!response.ok) {
                         throw new Error('Failed to delete image');
                     }
-                    // Remove the image container from the frontend
                     imageContainer.parentNode.removeChild(imageContainer);
                 })
                 .catch(error => {
                     console.error('Error deleting image:', error);
                 });
         }
-    </script>
 
+        // Show the dialog box
+        function showSuccessDialog() {
+            document.querySelector('.overlay').style.display = 'block';
+            document.querySelector('.dialog-box').style.display = 'block';
+        }
+
+        // Redirect to the view blog page
+        function redirectToViewBlog() {
+            window.location.href = `view-blog.html?id=${encodeURIComponent(blogId)}`;
+        }
+    </script> 
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
