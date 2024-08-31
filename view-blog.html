@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="./css/view-blog.css">
 </head>
+
 <body>
     <div class="navbar">
         <div class="navbar-title"><span id="logospan">Personal</span> Pursuits</div>
@@ -26,8 +28,18 @@
         <button id="deleteBlogButton" class="btn btn-danger" style="display: none;">Delete Blog</button>
     </div>
 
+    <!-- Comment Section -->
+    <div class="comments-section">
+        <h2>Comments</h2>
+        <div class="add-comment">
+            <textarea id="commentInput" placeholder="Add a comment..."></textarea>
+            <button id="addCommentButton" class="btn">Add Comment</button>
+        </div>
+        <div id="commentsContainer"></div>
+    </div>
+
     <!-- Success Dialog Box -->
-    <div id="successDialog" class="dialog-overlay">
+    <div id="successDialog" class="dialog-overlay" style="display: none;">
         <div class="dialog-box">
             <div class="dialog-content">
                 <i class="fas fa-check-circle"></i>
@@ -38,7 +50,7 @@
     </div>
 
     <!-- Error Dialog Box -->
-    <div id="errorDialog" class="dialog-overlay">
+    <div id="errorDialog" class="dialog-overlay" style="display: none;">
         <div class="dialog-box">
             <div class="dialog-content">
                 <i class="fas fa-exclamation-circle" style="color: #dc3545;"></i>
@@ -48,132 +60,296 @@
         </div>
     </div>
 
-    <!-- Confirmation Dialog Box -->
-    <div id="confirmDialog" class="dialog-overlay">
+    <!-- Confirmation Dialog Box for Comment Deletion -->
+    <div id="confirmDialog" class="dialog-overlay" style="display: none;">
         <div class="dialog-box">
             <div class="dialog-content">
                 <i class="fas fa-question-circle" style="color: #00796b;"></i>
-                <p>Are you sure you want to delete this blog?</p>
+                <p>Are you sure you want to delete this comment?</p>
                 <button id="confirmDelete" class="btn btn-danger">Yes</button>
                 <button id="cancelDelete" class="btn">No</button>
             </div>
         </div>
     </div>
 
+    <!-- Confirmation Dialog Box for Blog Deletion -->
+    <div id="confirmBlogDeleteDialog" class="dialog-overlay" style="display: none;">
+        <div class="dialog-box">
+            <div class="dialog-content">
+                <i class="fas fa-question-circle" style="color: #00796b;"></i>
+                <p>Are you sure you want to delete this blog?</p>
+                <button id="confirmBlogDelete" class="btn btn-danger">Yes</button>
+                <button id="cancelBlogDelete" class="btn">No</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Comment Modal -->
+    <div id="editCommentModal" class="dialog-overlay" style="display: none;">
+        <div class="dialog-box">
+            <div class="dialog-content">
+                <h3>Edit Comment</h3>
+                <textarea id="editCommentInput" placeholder="Edit your comment..."></textarea>
+                <button id="saveCommentButton" class="btn">Save</button>
+                <button id="cancelEditButton" class="btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-    const urlParams = new URLSearchParams(window.location.search);
-    const blogId = urlParams.get('id');
-    const jwt = localStorage.getItem('jwt');
+            const urlParams = new URLSearchParams(window.location.search);
+            const blogId = urlParams.get('id');
+            const jwt = localStorage.getItem('jwt');
 
-    // Dynamically update navigation links based on login status
-    const navLinks = document.getElementById('navLinks');
-    if (jwt) {
-        navLinks.innerHTML = `
-            <a href="index.html">Home</a>
-            <a href="my-blogs.html">My Blogs</a>
-            <a href="create-blog.html" >Create New Blog</a>
-            <a href="#" id="logoutBtn">Logout</a>
-            `;
-        } else {
-            navLinks.innerHTML = `
-            <a href="index.html">Home</a>
-            <a href="register.html">Register</a>
-            <a href="login.html">Login</a>
-            <a href="create-blog.html" class="btn">Create Blog</a>
-        `;
-    }
+            // Dynamically update navigation links based on login status
+            const navLinks = document.getElementById('navLinks');
+            if (jwt) {
+                navLinks.innerHTML = `
+                    <a href="index.html">Home</a>
+                    <a href="my-blogs.html">My Blogs</a>
+                    <a href="create-blog.html">Create New Blog</a>
+                    <a href="#" id="logoutBtn">Logout</a>
+                `;
+            } else {
+                navLinks.innerHTML = `
+                    <a href="index.html">Home</a>
+                    <a href="register.html">Register</a>
+                    <a href="login.html">Login</a>
+                    <a href="create-blog.html" class="btn">Create Blog</a>
+                `;
+            }
 
-    const logoutBtn = document.getElementById('logoutBtn');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', function (e) {
-            e.preventDefault(); 
-            localStorage.removeItem('jwt');
-            window.location.href = 'index.html';
-        });
-    }
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    localStorage.removeItem('jwt');
+                    window.location.href = 'index.html';
+                });
+            }
 
-    // Fetch the public blog post
-            // fetch(`http://localhost:8080/post/id/${blogId}`)
-            fetch(`https://javablogappbackend-production.up.railway.app/post/id/${blogId}`)
+            // Fetch the public blog post
+            fetch(`http://localhost:8080/post/id/${blogId}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Blog not found');
                     }
                     return response.json();
                 })
-        .then(blog => {
-            document.getElementById('blogTitle').textContent = blog.title;
-            document.getElementById('blogContent').textContent = blog.content;
-            const previewContainer = document.getElementById('imagePreview');
+                .then(blog => {
+                    document.getElementById('blogTitle').textContent = blog.title;
+                    document.getElementById('blogContent').textContent = blog.content;
+                    const previewContainer = document.getElementById('imagePreview');
 
-            if (blog.imageUrls) {
-                blog.imageUrls.forEach(url => {
-                    const imgElement = document.createElement('img');
-                    imgElement.src = url;
-                    previewContainer.appendChild(imgElement);
+                    if (blog.imageUrls) {
+                        blog.imageUrls.forEach(url => {
+                            const imgElement = document.createElement('img');
+                            imgElement.src = url;
+                            imgElement.alt = "Blog image"; // Add alt text for accessibility
+                            previewContainer.appendChild(imgElement);
+                        });
+                    }
+
+                    // Check if the logged-in user is the owner of the blog post
+                    return fetch(`http://localhost:8080/post/user/pid/${blogId}`, {
+                        headers: {
+                            'Authorization': 'Bearer ' + jwt
+                        }
+                    });
+                })
+                .then(response => {
+                    if (response.ok) {
+                        document.getElementById('editBlogLink').style.display = 'inline-block';
+                        document.getElementById('deleteBlogButton').style.display = 'inline-block';
+                        document.getElementById('editBlogLink').href += blogId;
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('errorMessage').textContent = error.message;
+                    document.getElementById('errorDialog').style.display = 'flex';
                 });
-            }
-            // Check if the logged-in user is the owner of the blog post
-            // return fetch(`http://localhost:8080/post/user/pid/${blogId}`, {
-            return fetch(`https://javablogappbackend-production.up.railway.app/post/user/pid/${blogId}`, {
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('jwt')
-                }
+
+            // Load comments for the blog
+            loadComments();
+
+            // Add new comment event
+            document.getElementById('addCommentButton').addEventListener('click', function () {
+                const commentText = document.getElementById('commentInput').value;
+
+                fetch(`http://localhost:8080/comments/create/${blogId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + jwt,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ postId: blogId, content: commentText })
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Error adding comment');
+                        }
+                        document.getElementById('commentInput').value = ''; // Clear the input
+                        loadComments(); // Reload comments after adding
+                    })
+                    .catch(error => {
+                        document.getElementById('errorMessage').textContent = error.message;
+                        document.getElementById('errorDialog').style.display = 'flex';
+                    });
             });
-        })
-        .then(response => {
-            if (response.ok) {
-                document.getElementById('editBlogLink').style.display = 'inline-block';
-                document.getElementById('deleteBlogButton').style.display = 'inline-block';
-                document.getElementById('editBlogLink').href += blogId; 
+
+            // Function to load comments
+            function loadComments() {
+                fetch(`http://localhost:8080/comments/blog/${blogId}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Error loading comments');
+                        }
+                        return response.json();
+                    })
+                    .then(comments => {
+                        const commentsContainer = document.getElementById('commentsContainer');
+                        commentsContainer.innerHTML = ''; // Clear previous comments
+
+                        comments.forEach(comment => {
+                            const commentDiv = document.createElement('div');
+                            commentDiv.className = 'comment';
+
+                            const commentText = document.createElement('p');
+                            commentText.textContent = comment.content;
+
+                            const editButton = document.createElement('button');
+                            editButton.className = 'editCommentButton';
+                            editButton.setAttribute('data-id', comment.id);
+                            editButton.textContent = 'Edit';
+
+                            const deleteButton = document.createElement('button');
+                            deleteButton.className = 'deleteCommentButton';
+                            deleteButton.setAttribute('data-id', comment.id);
+                            deleteButton.textContent = 'Delete';
+
+                            commentDiv.appendChild(commentText);
+                            commentDiv.appendChild(editButton);
+                            commentDiv.appendChild(deleteButton);
+                            commentsContainer.appendChild(commentDiv);
+
+                            // Edit comment event
+                            editButton.addEventListener('click', function () {
+                                const commentId = editButton.getAttribute('data-id');
+                                const commentContent = commentText.textContent;
+                                document.getElementById('editCommentInput').value = commentContent;
+                                document.getElementById('editCommentModal').style.display = 'flex';
+
+                                // Save comment event
+                                document.getElementById('saveCommentButton').onclick = function () {
+                                    fetch(`http://localhost:8080/comments/edit/${commentId}`, {
+                                        method: 'PUT',
+                                        headers: {
+                                            'Authorization': 'Bearer ' + jwt,
+                                            'Content-Type': 'application/json'
+                                        },
+                                        body: JSON.stringify({ content: document.getElementById('editCommentInput').value })
+                                    })
+                                        .then(response => {
+                                            if (!response.ok) {
+                                                throw new Error('Error updating comment');
+                                            }
+                                            document.getElementById('editCommentModal').style.display = 'none'; // Hide modal
+                                            loadComments(); // Reload comments after update
+                                        })
+                                        .catch(error => {
+                                            document.getElementById('errorMessage').textContent = error.message;
+                                            document.getElementById('errorDialog').style.display = 'flex';
+                                        });
+                                };
+
+                                document.getElementById('cancelEditButton').onclick = function () {
+                                    document.getElementById('editCommentModal').style.display = 'none'; // Hide modal
+                                };
+                            });
+
+                            // Delete comment event
+                            deleteButton.addEventListener('click', function () {
+                                const commentId = deleteButton.getAttribute('data-id');
+                                document.getElementById('confirmDialog').style.display = 'flex';
+
+                                document.getElementById('confirmDelete').onclick = function () {
+                                    fetch(`http://localhost:8080/comments/delete/${commentId}`, {
+                                        method: 'DELETE',
+                                        headers: {
+                                            'Authorization': 'Bearer ' + jwt
+                                        }
+                                    })
+                                        .then(response => {
+                                            if (!response.ok) {
+                                                throw new Error('Error deleting comment');
+                                            }
+                                            document.getElementById('confirmDialog').style.display = 'none'; // Hide confirmation dialog
+                                            loadComments(); // Reload comments after deletion
+                                        })
+                                        .catch(error => {
+                                            document.getElementById('errorMessage').textContent = error.message;
+                                            document.getElementById('errorDialog').style.display = 'flex';
+                                        });
+                                };
+
+                                document.getElementById('cancelDelete').onclick = function () {
+                                    document.getElementById('confirmDialog').style.display = 'none'; // Hide confirmation dialog
+                                };
+                            });
+                        });
+                    })
+                    .catch(error => {
+                        document.getElementById('errorMessage').textContent = error.message;
+                        document.getElementById('errorDialog').style.display = 'flex';
+                    });
             }
-        })
-        .catch(error => {
-            document.getElementById('errorMessage').textContent = error.message;
-            document.getElementById('errorDialog').style.display = 'flex';
+            // Delete blog event
+            document.getElementById('deleteBlogButton').addEventListener('click', function () {
+                // Show the confirmation dialog for blog deletion
+                document.getElementById('confirmBlogDeleteDialog').style.display = 'flex';
+
+                // Handle confirmation of blog deletion
+                document.getElementById('confirmBlogDelete').onclick = function () {
+                    fetch(`http://localhost:8080/post/id/${blogId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': 'Bearer ' + jwt
+                        }
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Error deleting blog');
+                            }
+                            document.getElementById('confirmBlogDeleteDialog').style.display = 'none'; // Hide confirmation dialog
+                            document.getElementById('successDialog').style.display = 'flex'; // Show success dialog
+
+                            window.location.href = 'my-blogs.html'; // Redirect to another page
+                        })
+                        .catch(error => {
+                            document.getElementById('confirmBlogDeleteDialog').style.display = 'none'; // Hide confirmation dialog on error
+                            document.getElementById('errorMessage').textContent = error.message; // Set the error message
+                            document.getElementById('errorDialog').style.display = 'flex'; // Show error dialog
+                        });
+                };
+
+                // Handle cancellation of blog deletion
+                document.getElementById('cancelBlogDelete').onclick = function () {
+                    document.getElementById('confirmBlogDeleteDialog').style.display = 'none'; // Hide confirmation dialog
+                };
+            });
+
+
+            // Close dialogs
+            document.getElementById('closeDialogButton').addEventListener('click', function () {
+                document.getElementById('successDialog').style.display = 'none'; // Close success dialog
+            });
+
+            document.getElementById('closeErrorDialogButton').addEventListener('click', function () {
+                document.getElementById('errorDialog').style.display = 'none'; // Close error dialog
+            });
         });
-
-    document.getElementById('deleteBlogButton').addEventListener('click', function () {
-        document.getElementById('confirmDialog').style.display = 'flex';
-    });
-
-    document.getElementById('confirmDelete').addEventListener('click', function () {
-         // fetch(`http://localhost:8080/post/id/${blogId}`, {
-        fetch(`https://javablogappbackend-production.up.railway.app/post/id/${blogId}`, {
-            method: 'DELETE',
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem('jwt')
-            }
-        })
-            .then(response => {
-                if (!response.ok) {
-                    return response.text().then(text => { throw new Error(text); });
-                }
-                document.getElementById('confirmDialog').style.display = 'none';
-                document.getElementById('successDialog').style.display = 'flex';
-            })
-            .catch(error => {
-                document.getElementById('confirmDialog').style.display = 'none';
-                document.getElementById('errorMessage').textContent = 'Error deleting blog: ' + error.message;
-                document.getElementById('errorDialog').style.display = 'flex';
-            });
-    });
-
-    document.getElementById('cancelDelete').addEventListener('click', function () {
-        document.getElementById('confirmDialog').style.display = 'none';
-    });
-
-    document.getElementById('closeDialogButton').addEventListener('click', function () {
-        document.getElementById('successDialog').style.display = 'none';
-        window.location.href = 'index.html';
-    });
-
-    document.getElementById('closeErrorDialogButton').addEventListener('click', function () {
-        document.getElementById('errorDialog').style.display = 'none';
-    });
-});
-
     </script>
 </body>
+
 </html>
